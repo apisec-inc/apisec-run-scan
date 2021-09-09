@@ -1,0 +1,31 @@
+name: 'Apisec-Action'
+description: 'Job Invoke Scan'
+inputs:
+  Username:  # id of input
+    description: 'FX_USER'
+    required: true
+  Password:  # id of input
+    description: 'FX_PWD'
+    required: true
+  ProjectID:  # id of input
+    description: 'FX_PROJECTID'
+    required: true   
+  Region:  # id of input
+    description: 'REGION'
+    required: true    
+  ProfilesID:  # id of input
+    description: 'FX_PROFILESID'
+    required: true
+  JobID:  # id of input
+    description: 'FX_JOBID'
+    required: true    
+#outputs:
+#  random-number:
+#    description: "Random number"
+#    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - run: | 
+         wget https://raw.githubusercontent.com/intesar/FX-Scripts/master/fx_job_invoke_script.sh?token=AElo1orWSWln6w6y5uX0-1ylzPH8TX_3ks5bqJBywA%3D%3D -O fx_job_invoke_script.sh;bash fx_job_invoke_script.sh ${{inputs.Username}} ${{ inputs.Password }} ${{ inputs.ProjectID }} ${{ inputs.Region }} ${{ inputs.ProfilesID }} ${{ inputs.JobID }}
+      shell: bash
