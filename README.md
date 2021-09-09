@@ -40,7 +40,9 @@ ___
 
 ## Example usage
 
-The APIsec credentials are read from github secrets. NEVER STORE YOUR SECRETS IN THE REPOSITORY.
+The APIsec credentials are read from github secrets.
+
+**Warning:** Never store your secrets in the repository.
 
 ```yaml
 - name: Trigger APIsec scan
