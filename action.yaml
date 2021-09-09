@@ -1,4 +1,4 @@
-name: 'Scanner'
+name: 'apisec-run-scan'
 description: 'Trigger APIsec scan'
 inputs:
   apisec-username:
