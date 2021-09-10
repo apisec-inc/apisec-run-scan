@@ -1,3 +1,4 @@
+# action.yml
 name: 'apisec-run-scan'
 description: 'Trigger APIsec scan'
 inputs:
