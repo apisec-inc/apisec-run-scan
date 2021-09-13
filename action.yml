@@ -1,6 +1,10 @@
 # action.yml
 name: 'apisec-run-scan'
 description: 'Trigger APIsec scan'
+branding:
+  icon: 'anchor'
+  color: 'blue'
+  
 inputs:
   apisec-username:
     description: 'The APIsec username with which the scans will be executed'
