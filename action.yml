@@ -5,15 +5,15 @@ inputs:
   apisec-username:
     description: 'The APIsec username with which the scans will be executed'
     required: true
-    default: ''
+    default:
   apisec-password:
     description: 'The Password of the APIsec user with which the scans will be executed'
     required: true
-    default: ''  
+    default:  
   apisec-scan-job:  
     description: 'The id of the scan job to run'
     required: true
-    default: ''
+    default:
   apisec-region:  
     description: 'The location the scan will be executed in'
     required: true
@@ -21,11 +21,11 @@ inputs:
   apisec-environment:  
     description: 'The id of the environment to run'
     required: true
-    default: ''
+    default:
   apisec-project:
     description: 'The id of the project for security scan'
     required: true
-    default: ''
+    default:
 runs:
   using: "composite"
   steps:
