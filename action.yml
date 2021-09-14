@@ -1,6 +1,6 @@
 # action.yml
-name: 'apisec-run-scan'
-description: 'Trigger APIsec scan'
+name: 'APIsec Scan'
+description: 'Continuous, automated, comprehensive API Security Testing'
 inputs:
   apisec-username:
     description: 'The APIsec username with which the scans will be executed'
