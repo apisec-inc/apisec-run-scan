@@ -17,7 +17,7 @@ inputs:
   apisec-region:  
     description: 'The location the scan will be executed in'
     required: true
-    default: 'SUPER_1'
+    default: 'Super_1'
   apisec-environment:  
     description: 'The id of the environment to run'
     required: true
