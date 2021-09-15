@@ -54,7 +54,7 @@ The APIsec credentials are read from github secrets.
 ```yaml
 - name: Trigger APIsec scan
   id: scan
-  uses: apisec-inc/apisec-run-scan@latest
+  uses: apisec-inc/apisec-run-scan@v1.0.1
   with:
     apisec-username: '${{ secrets.apisec_username }}'
     apisec-password: '${{ secrets.apisec_password }}'
