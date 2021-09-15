@@ -1,8 +1,15 @@
 [![APIsec](https://cloud.fxlabs.io/assets/images/logo.png)](https://www.apisec.ai/product)
 
+APIsec addresses the critical need to secure APIs before they reach production. APIsec provides the industry’s only automated and continuous API testing platform that uncovers security vulnerabilities and logic flaws in APIs. Clients rely on APIsec to evaluate every update and release, ensuring that no APIs go to production with vulnerabilities.
+
 # apisec-run-scan 
 #### _Triggers on-demand scans for projects registered in APIsec._
 This action triggers the on-demand scans for projects registered in APIsec. Once the scan is completed successfully, You can view the scan results from the project home page in APIsec Platform. The link to view the scan results is also displayed on the console on successful completion of action.
+
+![ScreenShot-APISec-resized](https://user-images.githubusercontent.com/83706991/133243533-5a8cd3b6-9537-4427-af3b-58736fdfe010.jpg)
+
+
+
 
 If you configure the Issue Tracker to GitHub Issues (see [Auto Bug Management](https://www.apisec.ai/documentation#section6)), the list of open vulnerabilities across all security scans executed within this project can be viewed and closed from the GitHub issues.
 ___
