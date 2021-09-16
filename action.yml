@@ -29,5 +29,5 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: wget https://raw.githubusercontent.com/intesar/FX-Scripts/master/fx_job_invoke_script.sh?token=AElo1orWSWln6w6y5uX0-1ylzPH8TX_3ks5bqJBywA%3D%3D -O fx_job_invoke_script.sh;bash fx_job_invoke_script.sh ${{inputs.apisec-username}} ${{ inputs.apisec-password }} ${{ inputs.apisec-project }} ${{ inputs.apisec-region }} ${{ inputs.apisec-environment }} ${{ inputs.apisec-scan-job }}
+    - run: wget https://raw.githubusercontent.com/intesar/FX-Scripts/master/fx_job_invoke_script.sh?token=AElo1orWSWln6w6y5uX0-1ylzPH8TX_3ks5bqJBywA%3D%3D -O fx_job_invoke_script.sh;bash fx_job_invoke_script.sh ${{inputs.apisec-username}} ${{ inputs.apisec-password }} ${{ inputs.apisec-scan-job }} ${{ inputs.apisec-region }} ${{ inputs.apisec-environment }} ${{ inputs.apisec-project }} 
       shell: bash
