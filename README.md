@@ -8,11 +8,15 @@ This action triggers the on-demand scans for projects registered in APIsec. Once
 
 ![ScreenShot-APISec-resized](https://user-images.githubusercontent.com/83706991/133243533-5a8cd3b6-9537-4427-af3b-58736fdfe010.jpg)
 
+APIsec also provides Summary Report with OWASP Coverage, Category wise Test Cases and Vulnerabilities count.
+This can be used to share summary information about the security quality of your application without exposing the details of potentially-exploitable findings. 
 
-
+![APISec-Report-Image](https://user-images.githubusercontent.com/83706991/133770517-a4c7c4ed-fd69-4daa-a183-8a5a44a4e904.jpg)
 
 If you configure the Issue Tracker to GitHub Issues (see [Auto Bug Management](https://www.apisec.ai/documentation#section6)), the list of open vulnerabilities across all security scans executed within this project can be viewed and closed from the GitHub issues.
+
 ___
+
 ## Inputs
 
 ### `apisec-username`
