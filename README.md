@@ -60,8 +60,8 @@ The APIsec credentials are read from github secrets.
   id: scan
   uses: apisec-inc/apisec-run-scan@v1.0.1
   with:
-    apisec-username: '${{ secrets.apisec_username }}'
-    apisec-password: '${{ secrets.apisec_password }}'
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
     apisec-scan-job: "8a8094b67b9ac59e017ba54183153cf8"
     apisec-region: "Super_1"
     apisec-environment: "8a8094b67b9ac59e017ba5416f083b2e"
