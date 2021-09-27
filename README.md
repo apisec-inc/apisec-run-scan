@@ -2,6 +2,13 @@
 
 APIsec addresses the critical need to secure APIs before they reach production. APIsec provides the industry’s only automated and continuous API testing platform that uncovers security vulnerabilities and logic flaws in APIs. Clients rely on APIsec to evaluate every update and release, ensuring that no APIs go to production with vulnerabilities.
 
+## How to Get Started with Apisec.ai
+1. [Schedule a demo](https://www.apisec.ai/request-a-demo)
+2. [Register your account](https://cloud.fxlabs.io/#/signup)
+3. [Register your API](https://www.youtube.com/watch?v=MK3Xo9Dbvac)
+4. Get GitHub Actions scan attributes from Apisec / Project / Configurations / Integrations / CI-CD / GitHub Actions
+
+
 # apisec-run-scan 
 #### _Triggers on-demand scans for projects registered in APIsec._
 This action triggers the on-demand scans for projects registered in APIsec. Once the scan is completed successfully, You can view the scan results from the project home page in APIsec Platform. The link to view the scan results is also displayed on the console on successful completion of action.
@@ -29,23 +36,17 @@ ___
 **Required** The Password of the APIsec user with which the scans will be executed.
 |Default value|`""`|
 --- | ---
-### `apisec-scan-job`
-**Required** The id of the scan job to run.
+### `apisec-project`
+**Required** The Name of the project for security scan.
 |Default value|`""`|
+--- | ---
+### `apisec-profile`
+**Optional** The Name of the scan profile to be executed.
+|Default value|`"Master"`|
 --- | ---
 ### `apisec-region`
-**Required**  The location the scan will be executed in
-|Default value|`"SUPER_1"`|
---- | ---
-
-### `apisec-environment`
-**Required** The id of the environment to run.
-|Default value|`""`|
---- | ---
-
-### `apisec-project`
-**Required** The id of the project for security scan.
-|Default value|`""`|
+**Optional**  The location the scan will be executed in
+|Default value|`"The location configured in Profile"`|
 --- | ---
 
 
@@ -55,15 +56,27 @@ The APIsec credentials are read from github secrets.
 
 **Warning:** Never store your secrets in the repository.
 
+### Basic:
+
 ```yaml
 - name: Trigger APIsec scan
   id: scan
-  uses: apisec-inc/apisec-run-scan@v1.0.1
+  uses: apisec-inc/apisec-run-scan@v1.0.3
   with:
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
-    apisec-scan-job: "8a8094b67b9ac59e017ba54183153cf8"
+    apisec-project: "VAmPI"
+```
+### Advanced:
+
+```yaml
+- name: Trigger APIsec scan
+  id: scan
+  uses: apisec-inc/apisec-run-scan@v1.0.3
+  with:
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
+    apisec-project: "VAmPI"
+    apisec-profile: "Staging"
     apisec-region: "Super_1"
-    apisec-environment: "8a8094b67b9ac59e017ba5416f083b2e"
-    apisec-project: "8a8094b67b9ac59e017ba5416f043b2c"
 ```

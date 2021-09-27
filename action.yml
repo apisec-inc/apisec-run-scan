@@ -21,7 +21,7 @@ inputs:
   apisec-region:  
     description: 'The location the scan will be executed in'
     required: false
-    default: 'The location configured in Profile'
+    default: ''
  
 runs:
   using: "composite"
