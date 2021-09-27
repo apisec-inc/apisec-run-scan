@@ -2,11 +2,15 @@
 
 APIsec addresses the critical need to secure APIs before they reach production. APIsec provides the industry’s only automated and continuous API testing platform that uncovers security vulnerabilities and logic flaws in APIs. Clients rely on APIsec to evaluate every update and release, ensuring that no APIs go to production with vulnerabilities.
 
-## How to Get Started with Apisec.ai
+## How to Get Started with APIsec.ai
 1. [Schedule a demo](https://www.apisec.ai/request-a-demo)
 2. [Register your account](https://cloud.fxlabs.io/#/signup)
 3. [Register your API](https://www.youtube.com/watch?v=MK3Xo9Dbvac)
-4. Get GitHub Actions scan attributes from Apisec / Project / Configurations / Integrations / CI-CD / GitHub Actions
+4. Get GitHub Actions scan attributes from **APIsec Project -> Configurations -> Integrations -> CI-CD -> GitHub Actions**
+
+![image](https://user-images.githubusercontent.com/83706991/134920640-95a0a6cd-ca03-44da-a86d-09a7b5810b47.png)
+
+
 
 
 # apisec-run-scan 
