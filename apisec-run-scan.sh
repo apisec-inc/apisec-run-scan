@@ -19,6 +19,7 @@ elif [ "$REGION" != "" ];
   PARAM_SCRIPT="?region="+${REGION}
 fi
 
+
 token=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${USER}'", "password": "'${PWD}'"}' https://cloud.fxlabs.io/login | jq -r .token)
 
 echo "generated token is:" $token
