@@ -9,14 +9,14 @@ REGION=$5
 PARAM_SCRIPT=""
 if [ "$JOB" != "" ];
 then
-PARAM_SCRIPT="?jobName="+${JOB}
+PARAM_SCRIPT="?jobName="${JOB}
   if [ "$REGION" != "" ];
   then
-  PARAM_SCRIPT=PARAM_SCRIPT+"&region="+${REGION}
+  PARAM_SCRIPT=${PARAM_SCRIPT}"&region="${REGION}
   fi
 elif [ "$REGION" != "" ];
   then
-  PARAM_SCRIPT="?region="+${REGION}
+  PARAM_SCRIPT="?region="${REGION}
 fi
 
 
