@@ -29,7 +29,7 @@ echo "The request is https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}$
 runId=$(curl --location --request POST "https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
 
 echo "runId =" $runId
-if ["$runId" == "" || "$runId" == "null"];
+if ["$runId" == ""];
 then
           echo "RunId = " "$runId"
           echo "Invalid runid"
