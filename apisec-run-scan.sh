@@ -24,10 +24,12 @@ token=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'$
 
 echo "generated token is:" $token
 
+echo "The request is https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}"
+
 runId=$(curl --location --request POST "https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
 
 echo "runId =" $runId
-if [ -z "$runId" ]
+if [ -z "$runId"]
 then
           echo "RunId = " "$runId"
           echo "Invalid runid"
