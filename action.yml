@@ -10,24 +10,21 @@ inputs:
     description: 'The Password of the APIsec user with which the scans will be executed'
     required: true
     default: '' 
-  apisec-scan-job:  
-    description: 'The id of the scan job to run'
+  apisec-project:
+    description: 'The Name of the project for security scan'
     required: true
     default: ''
+  apisec-profile:  
+    description: 'The Name of the scan profile to be executed'
+    required: false
+    default: 'Master'
   apisec-region:  
     description: 'The location the scan will be executed in'
-    required: true
-    default: 'Super_1'
-  apisec-environment:  
-    description: 'The id of the environment to run'
-    required: true
-    default: ''
-  apisec-project:
-    description: 'The id of the project for security scan'
-    required: true
-    default: ''
+    required: false
+    default: 'The location configured in Profile'
+ 
 runs:
   using: "composite"
   steps:
-    - run: wget https://raw.githubusercontent.com/intesar/FX-Scripts/master/fx_job_invoke_script.sh?token=AElo1orWSWln6w6y5uX0-1ylzPH8TX_3ks5bqJBywA%3D%3D -O fx_job_invoke_script.sh;bash fx_job_invoke_script.sh ${{inputs.apisec-username}} ${{ inputs.apisec-password }} ${{ inputs.apisec-scan-job }} ${{ inputs.apisec-region }} ${{ inputs.apisec-environment }} ${{ inputs.apisec-project }} 
+    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh ${{inputs.apisec-username}} ${{ inputs.apisec-password }} ${{ inputs.apisec-project }} ${{ inputs.apisec-profile }} ${{ inputs.apisec-region }} 
       shell: bash
