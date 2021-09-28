@@ -7,6 +7,7 @@ APIsec addresses the critical need to secure APIs before they reach production. 
 2. <a href="https://cloud.fxlabs.io/#/signup" target="_blank" rel="noopener noreferrer">Register your account</a>
 3. <a href="https://www.youtube.com/watch?v=MK3Xo9Dbvac" target="_blank" rel="noopener noreferrer">Register your API</a>
 4. Get GitHub Actions scan attributes from **APIsec Project -> Configurations -> Integrations -> CI-CD -> GitHub Actions**
+5. [Schedule a demo](https://www.apisec.ai/request-a-demo){:target="_blank" rel="noopener"}
 
 ![image](https://user-images.githubusercontent.com/83706991/134920640-95a0a6cd-ca03-44da-a86d-09a7b5810b47.png)
 
