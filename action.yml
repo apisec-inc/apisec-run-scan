@@ -22,9 +22,13 @@ inputs:
     description: 'The location the scan will be executed in'
     required: false
     default: ''
+  sarif-result-file:  
+    description: 'The path to the sarif format result file'
+    required: false
+    default: ''
  
 runs:
   using: "composite"
   steps:
-    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh ${{inputs.apisec-username}} ${{ inputs.apisec-password }} ${{ inputs.apisec-project }} ${{ inputs.apisec-profile }} ${{ inputs.apisec-region }} 
+    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
       shell: bash
