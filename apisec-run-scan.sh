@@ -1,11 +1,11 @@
 #!/bin/bash
 # Begin
-
 USER=$1
 PWD=$2
 PROJECT=$3
 JOB=$4
 REGION=$5
+OUTPUT_FILENAME=$6
 PARAM_SCRIPT=""
 if [ "$JOB" != "" ];
 then
@@ -26,7 +26,10 @@ echo "generated token is:" $token
 
 echo "The request is https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}"
 
-runId=$(curl --location --request POST "https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
+data=$(curl --location --request POST "https://cloud.fxlabs.io/api/v1/runs/projectName/${PROJECT}${PARAM_SCRIPT}" --header "Authorization: Bearer "$token"" | jq '.data')
+
+runId=$( jq -r '.id' <<< "$data")
+projectId=$( jq -r '.job.project.id' <<< "$data")
 
 echo "runId =" $runId
 if [ -z "$runId" ]
@@ -65,6 +68,12 @@ while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
                         echo  "Run detail link https://cloud.fxlabs.io${array[7]}"
                         echo "-----------------------------------------------"
                         echo "Job run successfully completed"
+                        if [ "$OUTPUT_FILENAME" != "" ];
+                         then
+                         sarifoutput=$(curl --location --request GET "https://cloud.fxlabs.io/api/v1/projects/${projectId}/sarif" --header "Authorization: Bearer "$token""| jq '.data')
+						 echo $sarifoutput >> $GITHUB_WORKSPACE/$OUTPUT_FILENAME
+						 echo "SARIF output file created successfully"
+                        fi
                         exit 0
 
                 fi
