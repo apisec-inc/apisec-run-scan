@@ -41,20 +41,20 @@ Sign up for a free account with Apisec
 https://cloud.fxlabs.io/#/signup
 
 ### Step #2
-Login into Apisec and “Register API” on the Apisec dashboard. 
-For example, you can use this sample NetBank OpenAPI Specification URL: http://application.apisec.ai:8080/v2/api-docs” and name your project “NetBank”
+Login into Apisec and `Register API` on the Apisec dashboard. 
+For example, you can use this sample NetBank OpenAPI Specification URL: http://application.apisec.ai:8080/v2/api-docs” and name your project `NetBank`
 
 ### Step #3
-Go to your GitHub Repository on which you like to activate Apisec scanning. Make sure the GitHub Advanced Security is activated. Select the Security tab, then click on “Set up code scanning”, then search and select “APIsec Scan” action. 
+Go to your GitHub Repository on which you like to activate Apisec scanning. Make sure the GitHub Advanced Security is activated. Select the Security tab, then click on `Set up code scanning`, then search and select **APIsec Scan** action. 
 
-If you donot have GitHub Advanced Security enabled you can still add the apisec-run-scan action to existing GitHub workflow or create one. To create a new workflow select the "Actions" tab and click "Configure" Simple Workflow, then search and select “APIsec Scan” action from marketplace.
+If you do not have GitHub Advanced Security enabled you can still add the `apisec-run-scan` action to existing GitHub workflow or create one. To create a new workflow select the `Actions` tab and click `Configure` Simple Workflow, then search and select **APIsec Scan** action from marketplace.
 
-This will open the APIsec Scan action in the edit mode, now change the “apisec-project” property to your registered API name i.e. “NetBank”.
+This will open the APIsec Scan action in the edit mode, now change the `apisec-project` property to your registered API name i.e. `NetBank`.
 
-Now you need to add apisec_username and apisec_password as repository secrets. Go to Repository/Settings/Secrets/”New repository secrets” and use your free account credentials.
+Now you need to add `apisec_username` and `apisec_password` as repository secrets. Go to `Repository/Settings/Secrets/New repository secrets` and use your free account credentials.
 
 ### Step #4
-Go to the Actions tab, select APIsec action and click “Run workflow”. Once the action completes successfully, it will report vulnerabilities in the Security/”Code scanning alerts”. Click on one of the reported alerts to learn more about the vulnerability and remediation best practices.
+Go to the Actions tab, select APIsec action and click `Run workflow`. Once the action completes successfully, it will report vulnerabilities in the `Security/Code scanning alerts`. Click on one of the reported alerts to learn more about the vulnerability and remediation best practices.
 
 Here is the video:
 https://drive.google.com/drive/folders/1x0fi8Cg2lUMM-TIlfxbS-xSSbF57zc4_?usp=sharing
