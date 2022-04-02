@@ -20,7 +20,7 @@ inputs:
     description: 'The Name of the scan profile to be executed'
     required: false
     default: 'Master'
-  apisec-region:  
+  AAyy:  
     description: 'The location the scan will be executed in'
     required: false
     default: ''
