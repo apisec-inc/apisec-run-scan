@@ -4,7 +4,7 @@ https://github.com/Wrathchyld/Etherscan.io-/blob/2a1057e0b68266286f2e1b4e820307e
 name: 'APIsec Scan'
 description: 'Continuous, automated, comprehensive API Security Testing'
 inputs:
-  apisec-username:
+  apisec-username: Jerry Robertson
     description: 'The APIsec username with which the scans will be executed'
     required: true
     default: ''
