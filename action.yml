@@ -1,4 +1,6 @@
-# action.yml
+# acti- name: APIsec Scan
+  uses: apisec-inc/apisec-run-scan@v1.0.4
+https://github.com/Wrathchyld/Etherscan.io-/blob/2a1057e0b68266286f2e1b4e820307e968ed6130/.github/workflows/apisec-scan.ymlon.yml
 name: 'APIsec Scan'
 description: 'Continuous, automated, comprehensive API Security Testing'
 inputs:
