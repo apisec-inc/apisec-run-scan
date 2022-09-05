@@ -102,7 +102,7 @@ The APIsec credentials are read from github secrets.
 ```yaml
 - name: Trigger APIsec scan
   id: scan
-  uses: apisec-inc/apisec-run-scan@v1.0.3
+  uses: apisec-inc/apisec-run-scan@v1.0.5
   with:
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
@@ -113,7 +113,7 @@ The APIsec credentials are read from github secrets.
 ```yaml
 - name: Trigger APIsec scan
   id: scan
-  uses: apisec-inc/apisec-run-scan@v1.0.3
+  uses: apisec-inc/apisec-run-scan@v1.0.5
   with:
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
@@ -126,7 +126,7 @@ The APIsec credentials are read from github secrets.
 ```yaml
 - name: Trigger APIsec scan
   id: scan
-  uses: apisec-inc/apisec-run-scan@v1.0.3
+  uses: apisec-inc/apisec-run-scan@v1.0.5
   with:
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
