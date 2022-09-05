@@ -42,7 +42,7 @@ https://cloud.fxlabs.io/#/signup
 
 ### Step #2
 Login into Apisec and `Register API` on the Apisec dashboard. 
-For example, you can use this sample NetBank OpenAPI Specification URL: http://application.apisec.ai:8080/v2/api-docs” and name your project `NetBank`
+For example, you can use this sample NetBank OpenAPI Specification URL: http://netbanking.apisec.ai:8080/v2/api-docs” and name your project `NetBank`
 
 ### Step #3
 Go to your GitHub Repository on which you like to activate Apisec scanning. Make sure the GitHub Advanced Security is activated. Select the Security tab, then click on `Set up code scanning`, then search and select **APIsec Scan** action. 
