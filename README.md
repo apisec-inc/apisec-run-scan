@@ -1,4 +1,4 @@
-[![APIsec](https://cloud.fxlabs.io/assets/images/logo.png)](https://www.apisec.ai/product)
+[![APIsec](https://cloud.apisec.ai/assets/images/logo.png)](https://www.apisec.ai/product)
 
 APIsec addresses the critical need to secure APIs before they reach production. APIsec provides the industry’s only automated and continuous API testing platform that uncovers security vulnerabilities and logic flaws in APIs. Clients rely on APIsec to evaluate every update and release, ensuring that no APIs go to production with vulnerabilities.
 
@@ -38,7 +38,7 @@ Identified vulnerabilities are formatted into SARIF and then reported into the s
 
 ### Step #1: 
 Sign up for a free account with Apisec
-https://cloud.fxlabs.io/#/signup
+https://cloud.apisec.ai/#/signup
 
 ### Step #2
 Login into Apisec and `Register API` on the Apisec dashboard. 
