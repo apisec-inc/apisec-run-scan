@@ -134,7 +134,7 @@ The APIsec credentials are read from github secrets.
     sarif-result-file: "apisec-results.sarif"
     
 - name: upload sarif file to repository
-  uses: github/codeql-action/upload-sarif@v1
+  uses: github/codeql-action/upload-sarif@v2
   with:
     sarif_file: ./apisec-results.sarif
 ```
