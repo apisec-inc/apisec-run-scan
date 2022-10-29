@@ -1,6 +1,6 @@
 #!/bin/bash
 # Begin
-TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner:,emailReport:,reportType:,tags:,fail-on-high-vulns,openApiSpecUrl,oas,playbookCreatePolicy,outputfile:" -- -- "$@")
+TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner:,emailReport:,reportType:,tags:,fail-on-high-vulns:,openApiSpecUrl:,oas:,refresh-playbooks:,outputfile:" -- -- "$@")
 
     [ $? -eq 0 ] || exit
 
@@ -20,7 +20,7 @@ TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner
                     --fail-on-high-vulns) FAIL_ON_HIGH_VULNS="$2"; shift;;
                     --oas) OAS="$2"; shift;;
                     --openApiSpecUrl) OPEN_API_SPEC_URL="$2"; shift;;
-                    --playbookCreatePolicy) PLAYBOOK_CREATE_POLICY="$2"; shift;;
+                    --refresh-playbooks) REFRESH_PLAYBOOKS="$2"; shift;;
                     --outputfile) OUTPUT_FILENAME="$2"; shift;;		    
                     --tags) FX_TAGS="$2"; shift;;
                     --) shift;;
@@ -56,8 +56,8 @@ if   [ "$OAS" == ""  ]; then
         OAS=false
 fi
 
-if   [ "$PLAYBOOK_CREATE_POLICY" == ""  ]; then
-        PLAYBOOK_CREATE_POLICY=false
+if   [ "$REFRESH_PLAYBOOKS" == ""  ]; then
+        REFRESH_PLAYBOOKS=false
 fi
 
 
@@ -106,7 +106,7 @@ if [ "$OAS" = true ]; then
                                  exit 1
                             fi
                         done
-                PLAYBOOK_CREATE_POLICY=false
+                REFRESH_PLAYBOOKS=false
 
      else
           echo "$FX_PROJECT_NAME project already exists."          
@@ -116,7 +116,7 @@ if [ "$OAS" = true ]; then
 fi
 
 
-if [ "$PLAYBOOK_CREATE_POLICY" = true ]; then
+if [ "$REFRESH_PLAYBOOKS" = true ]; then
 
       dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
       projectId=$(echo "$dto" | jq -r '.id')
@@ -131,7 +131,7 @@ if [ "$PLAYBOOK_CREATE_POLICY" = true ]; then
     while [ "$playbookTaskStatus" == "In_progress" ]
            do
                 if [ $pCount -eq 0 ]; then
-                     echo "Checking playbooks regenerate task Status...."
+                     echo "Checking playbooks refresh task Status...."
                 fi
                 pCount=`expr $pCount + 1`  
                 retryCount=`expr $retryCount + 1`  
@@ -140,13 +140,13 @@ if [ "$PLAYBOOK_CREATE_POLICY" = true ]; then
                 playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
                 #playbookTaskStatus="In_progress"
                 if [ "$playbookTaskStatus" == "Done" ]; then
-                     echo "Playbooks regenerate task is succesfully completed!!!"
+                     echo "Playbooks refresh task is succesfully completed!!!"
                 fi
 
                 if [ $retryCount -ge 55  ]; then
                      echo " "
                      retryCount=`expr $retryCount \* 2`  
-                     echo "Playbook Regenerate Task Status $playbookTaskStatus even after $retryCount seconds, so halting script execution!!!"
+                     echo "Playbook refresh Task Status $playbookTaskStatus even after $retryCount seconds, so halting script execution!!!"
                      exit 1
                 fi                            
            done
@@ -157,6 +157,7 @@ fi
 URL="${FX_HOST}/api/v1/runs/project/${FX_PROJECT_NAME}?jobName=${JOB_NAME}&region=${REGION}&emailReport=${FX_EMAIL_REPORT}&reportType=${FX_REPORT_TYPE}${FX_SCRIPT}"
 
 url=$( echo "$URL" | sed 's/ /%20/g' )
+echo "The request is $url"
 data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer "$token"" | jq -r '.["data"]')
 runId=$( jq -r '.id' <<< "$data")
 projectId=$( jq -r '.job.project.id' <<< "$data")
