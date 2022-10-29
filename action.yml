@@ -26,9 +26,81 @@ inputs:
     description: 'The path to the sarif format result file'
     required: false
     default: ''
- 
+  apisec-email-report:
+    description: 'To trigger scan email reports, set this value as "true" or else "false"'
+    required: false
+    default: ''
+  apisec-fail-on-high-vulns: 
+    description: 'Set this as true to break pipeline execution for High and Critical severity. By default its set as false.'
+    required: false
+    default: 'false'     
+  apisec-oas:
+    description: 'To register a project, set this value as "true" or else "false"'
+    required: false
+    default: 'false'
+  apisec-openapi-spec-url: 
+    description: 'OpenAPI Spec Url for registering a project'
+    required: false
+    default: ''  
+  apisec-playbookCreatePolicy:
+    description: 'To regenerate the playbooks of a project, set this value as "true" or else "false"'
+    required: false
+    default: ''       
+
 runs:
   using: "composite"
-  steps:
-    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
+  steps:  
+    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh --username "${{inputs.apisec-username}}" --password "${{ inputs.apisec-password }}" --project "${{ inputs.apisec-project }}" --profile "${{ inputs.apisec-profile }}" --scanner "${{ inputs.apisec-region }}"  --outputfile  ${{ inputs.sarif-result-file }}   --playbookCreatePolicy "${{ inputs.apisec-playbookCreatePolicy }}" --host "${{ inputs.apisec-hostname }}" --emailReport "${{ inputs.apisec-email-report }}" --fail-on-high-vulns "${{ inputs.apisec-fail-on-high-vulns }}" --oas "${{ inputs.apisec-oas }}" --openApiSpecUrl "${{ inputs.apisec-openapi-spec-url }}"
+   # - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
       shell: bash
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# action.yml
+# name: 'APIsec Scan'
+# description: 'Continuous, automated, comprehensive API Security Testing'
+# inputs:
+#   apisec-username:
+#     description: 'The APIsec username with which the scans will be executed'
+#     required: true
+#     default: ''
+#   apisec-password:
+#     description: 'The Password of the APIsec user with which the scans will be executed'
+#     required: true
+#     default: '' 
+#   apisec-project:
+#     description: 'The Name of the project for security scan'
+#     required: true
+#     default: ''
+#   apisec-profile:  
+#     description: 'The Name of the scan profile to be executed'
+#     required: false
+#     default: 'Master'
+#   apisec-region:  
+#     description: 'The location the scan will be executed in'
+#     required: false
+#     default: ''
+#   sarif-result-file:  
+#     description: 'The path to the sarif format result file'
+#     required: false
+#     default: ''
+ 
+# runs:
+#   using: "composite"
+#   steps:
+#     - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
+#       shell: bash
