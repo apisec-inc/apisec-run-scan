@@ -138,3 +138,59 @@ The APIsec credentials are read from github secrets.
   with:
     sarif_file: ./apisec-results.sarif
 ```
+
+
+### To get email reports for the triggered scans:
+
+```yaml
+- name: Trigger APIsec scan
+  id: scan
+  uses: apisec-inc/apisec-run-scan@v1.0.6
+  with:
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
+    apisec-project: "VAmPI"
+    apisec-email-report: true
+```
+
+### To break pipeline execution on finding High and Critical severity vulnerabilities: 
+
+```yaml
+- name: Trigger APIsec scan
+  id: scan
+  uses: apisec-inc/apisec-run-scan@v1.0.6
+  with:
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
+    apisec-project: "VAmPI"
+    apisec-fail-on-high-vulns: true
+```
+
+### To register new a project and trigger a scan:
+
+```yaml
+- name: Trigger APIsec scan
+  id: scan
+  uses: apisec-inc/apisec-run-scan@v1.0.6
+  with:
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
+    apisec-project: "VAmPI"
+    apisec-oas: true
+    apisec-openapi-spec-url: 'http://netbanking.apisec.ai:8080/v2/api-docs'
+        
+```
+
+### To refresh playbooks of a project and trigger a scan:
+
+```yaml
+- name: Trigger APIsec scan
+  id: scan
+  uses: apisec-inc/apisec-run-scan@v1.0.6
+  with:
+    apisec-username: ${{ secrets.apisec_username }}
+    apisec-password: ${{ secrets.apisec_password }}
+    apisec-project: "VAmPI"
+    apisec-refresh-playbooks: true
+        
+```
