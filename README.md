@@ -90,6 +90,26 @@ ___
 **Optional** The name of the sarif format result file. The file is written only if this property is provided.
 |Default value|`""`|
 --- | ---
+### `apisec-email-report`
+**Optional**  To get notify with scans results.
+|Default value|`"false"`|
+--- | ---
+### `apisec-fail-on-high-vulns`
+**Optional**  Set this value as "true" to break pipeline execution on finding High and Critical severity vulnerabilities.
+|Default value|`"false"`|
+--- | ---
+### `apisec-oas`
+**Optional**  Set this value as "true" to register a project and trigger a scan.
+|Default value|`"false"`|
+--- | ---
+### `apisec-openapi-spec-url`
+**Optional**  OpenAPI Spec Url for registering a project.
+|Default value|`""`|
+--- | ---
+### `apisec-refresh-playbooks`
+**Optional**  To refresh playbooks of a project and trigger a scan.
+|Default value|`"false"`|
+--- | ---
 
 ## Example usage
 
