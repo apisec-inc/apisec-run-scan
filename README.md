@@ -215,31 +215,32 @@ The APIsec credentials are read from github secrets.
         
 ```
 
-### Script execution flow description:
+### Description of script flow of execution:
 
 ```yaml
-     Script Purpose: This script does following things:
-                 1. Will register a project if one with the project name doesn't exist in APIsec product. 
-                    If it exists then script will either refresh the playbooks provided the user have  
-                    set the flag --refresh-playbooks as true or script will trigger scan on it.
+   Script Purpose: This script does following things:
+   
+       1. Will register a project if one with the project name doesn't exist in APIsec product. 
+          If it exists then script will either refresh the playbooks provided the user have  
+          set the flag --refresh-playbooks as true or script will trigger scan on it.
                      
-                    User need to set --oas as true and --openApiSpecUrl with swagger/open api spec URL
-                    like --oas true --openApiSpecUrl "http://netbanking.apisec.ai:8080/v2/api-docs"
+          User need to set --oas as true and --openApiSpecUrl with swagger/open api spec URL
+          like --oas true --openApiSpecUrl "http://netbanking.apisec.ai:8080/v2/api-docs"
 
-                 2. Will refresh/regenerate playbooks of a project if --refresh-playbooks flag is set as true.
+       2. Will refresh/regenerate playbooks of a project if --refresh-playbooks flag is set as true.
 
-                 3. Will trigger a scan on a project.
+       3. Will trigger a scan on a project.
 
-                 4. Will generate Sarif file after scan trigger gets completed, if --outputfile parameter passed with some string like "sarif".
-                    We can use it to  file Vulnerabilities in Github CodeScanning/SecurityCenter.
+       4. Will generate Sarif file after scan trigger gets completed, if --outputfile parameter passed with some string like "sarif".
+          We can use it to  file Vulnerabilities in Github CodeScanning/SecurityCenter.
 
-                 5. Checks for vulnerability  of a severity and breaks pipeline execution upon finding one for following use-cases.                    
+       5. Checks for vulnerability  of a severity and breaks pipeline execution upon finding one for following use-cases.                    
 
-                     i) If user set flag   --fail-on-vuln-severity severity as Critical, then only Critical severity will be checked.
+             i) If user set flag   --fail-on-vuln-severity severity as Critical, then only Critical severity will be checked.
 
-                    ii) If user set flag  --fail-on-vuln-severity severity as High, then Critical and High severities will be checked.
+            ii) If user set flag  --fail-on-vuln-severity severity as High, then Critical and High severities will be checked.
 
-                   iii) If user set flag --fail-on-vuln-severity severity as Medium, then Critical, High and Medium severity will be checked.
+           iii) If user set flag --fail-on-vuln-severity severity as Medium, then Critical, High and Medium severity will be checked.
 
-                 6. To get email reports for trigger scans we need to set --emailReport flag as "true".    
+       6. To get email reports for trigger scans we need to set --emailReport flag as "true".    
 ```
