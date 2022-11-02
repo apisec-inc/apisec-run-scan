@@ -1,6 +1,7 @@
 #!/bin/bash
 # Begin
-TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner:,emailReport:,reportType:,tags:,fail-on-high-vulns:,openApiSpecUrl:,oas:,refresh-playbooks:,outputfile:" -- -- "$@")
+
+TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner:,emailReport:,reportType:,tags:,fail-on-vuln-severity:,openApiSpecUrl:,oas:,refresh-playbooks:,outputfile:" -- -- "$@")
 
     [ $? -eq 0 ] || exit
 
@@ -17,7 +18,7 @@ TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner
                     --scanner) REGION="$2"; shift;;
                     --emailReport) FX_EMAIL_REPORT="$2"; shift;;
                     --reportType) FX_REPORT_TYPE="$2"; shift;;
-                    --fail-on-high-vulns) FAIL_ON_HIGH_VULNS="$2"; shift;;
+                    --fail-on-vuln-severity) FAIL_ON_VULN_SEVERITY="$2"; shift;;
                     --oas) OAS="$2"; shift;;
                     --openApiSpecUrl) OPEN_API_SPEC_URL="$2"; shift;;
                     --refresh-playbooks) REFRESH_PLAYBOOKS="$2"; shift;;
@@ -48,9 +49,13 @@ then
 FX_SCRIPT="&tags=script:"+${FX_TAGS}
 fi
 
-if   [ "$FAIL_ON_HIGH_VULNS" == ""  ]; then
-        FAIL_ON_HIGH_VULNS=false
+if   [ "$FAIL_ON_VULN_SEVERITY" == "Critical"  ] || [ "$FAIL_ON_VULN_SEVERITY" == "High"  ] || [ "$FAIL_ON_VULN_SEVERITY" == "Medium"  ]; then
+        FAIL_ON_VULN_SEVERITY_FLAG=true
+else
+        FAIL_ON_VULN_SEVERITY_FLAG=false        
 fi
+
+
 
 if   [ "$OAS" == ""  ]; then
         OAS=false
@@ -206,7 +211,7 @@ while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
                		      echo "SARIF output file created successfully"
                               echo " "
                         fi
-                        if [ "$FAIL_ON_HIGH_VULNS" = true ]; then
+                        if [ "$FAIL_ON_VULN_SEVERITY_FLAG" = true ]; then
                               severity=$(curl -s -X GET "${FX_HOST}/api/v1/projects/${projectId}/vulnerabilities?&severity=All&page=0&pageSize=20" -H "accept: */*"  "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[] | .severity')
 
                                 cVulCount=0
@@ -302,19 +307,43 @@ while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
                                 echo "Found $triVulCount Trivial Severity Vulnerabilities!!!"
                                 echo " "
 
-                                vCount=1
-                                for vul in ${severity}
-                                    do
+
+                            
+                            
+                     case "$FAIL_ON_VULN_SEVERITY" in
+                         "Critical") for vul in ${severity}
+                                         do
                                                 
-                                          if  [ "$vul" == "Critical"  ] || [ "$vul" == "High"  ] ; then
-                                                 echo "Failing script execution since we have found "$vul" severity vulnerability!!!"
+                                             if  [ "$vul" == "Critical"  ] || [ "$vul" == "High"  ] ; then
+                                                 echo "Failing script execution since we have found $cVulCount Critical severity vulnerabilities!!!"
                                                  exit 1
                                            
-                                          fi
-                                          vCount=`expr $vCount + 1`
-                                    done
-                            
-                            
+                                             fi                                             
+                                        done
+                         ;;
+                        "High") for vul in ${severity}
+                                         do
+                                                
+                                             if  [ "$vul" == "Critical"  ] || [ "$vul" == "High"  ] ; then
+                                                 echo "Failing script execution since we have found $cVulCount Critical and $hVulCount High severity vulnerabilities!!!"
+                                                 exit 1
+                                           
+                                             fi                                             
+                                        done
+                         ;;
+                        "Medium") for vul in ${severity}
+                                         do
+                                                
+                                             if  [ "$vul" == "Critical"  ] || [ "$vul" == "High"  ] || [ "$vul" == "Medium"  ] ; then
+                                                 echo "Failing script execution since we have found $cVulCount Critical, $hVulCount High and $medVulCount Medium severity vulnerabilities!!!"
+                                                 exit 1
+                                           
+                                             fi                                             
+                                        done
+                        ;;
+                      *)                          
+                     esac
+
                         fi 
                         exit 0
 

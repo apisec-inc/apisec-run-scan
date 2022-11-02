@@ -94,9 +94,9 @@ ___
 **Optional**  To get notify with scans results.
 |Default value|`"false"`|
 --- | ---
-### `apisec-fail-on-high-vulns`
-**Optional**  Set this value as "true" to break pipeline execution on finding High and Critical severity vulnerabilities.
-|Default value|`"false"`|
+### `apisec-fail-on-vuln-severity`
+**Optional**  Pass the severity string for which pipeline execution breaks upon finding that severity vulnerability. Possible string values are Critical, High and Medium severity. By default its an empty string ""
+|Default value|`""`|
 --- | ---
 ### `apisec-oas`
 **Optional**  Set this value as "true" to register a project and trigger a scan.
@@ -183,7 +183,7 @@ The APIsec credentials are read from github secrets.
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
     apisec-project: "VAmPI"
-    apisec-fail-on-high-vulns: true
+    apisec-fail-on-vuln-severity: 'High'
 ```
 
 ### To register new a project and trigger a scan:

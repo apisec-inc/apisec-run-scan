@@ -30,10 +30,10 @@ inputs:
     description: 'To trigger scan email reports, set this value as "true" or else "false"'
     required: false
     default: ''
-  apisec-fail-on-high-vulns: 
-    description: 'Set this as true to break pipeline execution for High and Critical severity. By default its set as false.'
+  apisec-fail-on-vuln-severity: 
+    description: 'Pass the severity string for which pipeline execution breaks upon finding that severity vulnerability. Possible string values are Critical, High and Medium severity. By default its an empty string "".'
     required: false
-    default: 'false'     
+    default: ''     
   apisec-oas:
     description: 'To register a project, set this value as "true" or else "false"'
     required: false
@@ -50,7 +50,7 @@ inputs:
 runs:
   using: "composite"
   steps:  
-    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh --username "${{inputs.apisec-username}}" --password "${{ inputs.apisec-password }}" --project "${{ inputs.apisec-project }}" --profile "${{ inputs.apisec-profile }}" --scanner "${{ inputs.apisec-region }}"  --outputfile  ${{ inputs.sarif-result-file }}   --refresh-playbooks "${{ inputs.apisec-refresh-playbooks }}" --host "${{ inputs.apisec-hostname }}" --emailReport "${{ inputs.apisec-email-report }}" --fail-on-high-vulns "${{ inputs.apisec-fail-on-high-vulns }}" --oas "${{ inputs.apisec-oas }}" --openApiSpecUrl "${{ inputs.apisec-openapi-spec-url }}"
+    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh --username "${{inputs.apisec-username}}" --password "${{ inputs.apisec-password }}" --project "${{ inputs.apisec-project }}" --profile "${{ inputs.apisec-profile }}" --scanner "${{ inputs.apisec-region }}"  --outputfile  ${{ inputs.sarif-result-file }}   --refresh-playbooks "${{ inputs.apisec-refresh-playbooks }}" --host "${{ inputs.apisec-hostname }}" --emailReport "${{ inputs.apisec-email-report }}" --fail-on-vuln-severity "${{ inputs.apisec-fail-on-vuln-severity }}" --oas "${{ inputs.apisec-oas }}" --openApiSpecUrl "${{ inputs.apisec-openapi-spec-url }}"
    # - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
       shell: bash
 
