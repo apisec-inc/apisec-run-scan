@@ -170,7 +170,7 @@ The APIsec credentials are read from github secrets.
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
     apisec-project: "VAmPI"
-    apisec-email-report: true
+    apisec-email-report: "true"
 ```
 
 ### To break pipeline execution on finding High and Critical severity vulnerabilities: 
@@ -183,7 +183,7 @@ The APIsec credentials are read from github secrets.
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
     apisec-project: "VAmPI"
-    apisec-fail-on-vuln-severity: 'High'
+    apisec-fail-on-vuln-severity: "High"
 ```
 
 ### To register new a project and trigger a scan:
@@ -196,8 +196,8 @@ The APIsec credentials are read from github secrets.
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
     apisec-project: "VAmPI"
-    apisec-oas: true
-    apisec-openapi-spec-url: 'http://netbanking.apisec.ai:8080/v2/api-docs'
+    apisec-oas: "true"
+    apisec-openapi-spec-url: "http://netbanking.apisec.ai:8080/v2/api-docs"
         
 ```
 
@@ -211,7 +211,7 @@ The APIsec credentials are read from github secrets.
     apisec-username: ${{ secrets.apisec_username }}
     apisec-password: ${{ secrets.apisec_password }}
     apisec-project: "VAmPI"
-    apisec-refresh-playbooks: true
+    apisec-refresh-playbooks: "true"
         
 ```
 
