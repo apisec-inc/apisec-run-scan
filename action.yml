@@ -50,7 +50,7 @@ inputs:
 runs:
   using: "composite"
   steps:  
-    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh --username "${{inputs.apisec-username}}" --password "${{ inputs.apisec-password }}" --project "${{ inputs.apisec-project }}" --profile "${{ inputs.apisec-profile }}" --scanner "${{ inputs.apisec-region }}"  --outputfile  ${{ inputs.sarif-result-file }}   --refresh-playbooks "${{ inputs.apisec-refresh-playbooks }}" --host "${{ inputs.apisec-hostname }}" --emailReport "${{ inputs.apisec-email-report }}" --fail-on-vuln-severity "${{ inputs.apisec-fail-on-vuln-severity }}" --oas "${{ inputs.apisec-oas }}" --openApiSpecUrl "${{ inputs.apisec-openapi-spec-url }}"
+    - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh --username "${{inputs.apisec-username}}" --password "${{ inputs.apisec-password }}" --project "${{ inputs.apisec-project }}" --profile "${{ inputs.apisec-profile }}" --scanner "${{ inputs.apisec-region }}"  --outputfile  "${{ inputs.sarif-result-file }}"   --refresh-playbooks "${{ inputs.apisec-refresh-playbooks }}" --host "${{ inputs.apisec-hostname }}" --emailReport "${{ inputs.apisec-email-report }}" --fail-on-vuln-severity "${{ inputs.apisec-fail-on-vuln-severity }}" --oas "${{ inputs.apisec-oas }}" --openApiSpecUrl "${{ inputs.apisec-openapi-spec-url }}"
    # - run:  ${GITHUB_ACTION_PATH}/apisec-run-scan.sh "${{inputs.apisec-username}}" "${{ inputs.apisec-password }}" "${{ inputs.apisec-project }}" "${{ inputs.apisec-profile }}" "${{ inputs.apisec-region }}" "${{ inputs.sarif-result-file }}" 
       shell: bash
 
