@@ -113,6 +113,61 @@ ___
 
 ## Example usage
 
+Below is a sample of a complete workflow action. It does not have ALL the possible elements.
+Further down in the documentation you can see additional options for further configuration.
+### Full sample
+
+```yaml
+
+# This is a starter workflow to help you get started with APIsec-Scan Actions
+
+name: APIsec
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Customize trigger events based on your DevSecOps processes.
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '21 19 * * 4'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+
+jobs:
+
+  Trigger_APIsec_scan:
+    permissions:
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status 
+    runs-on: ubuntu-latest
+
+    steps:
+       - name: APIsec scan
+         uses: apisec-inc/apisec-run-scan@v1.0.6
+         with:
+          # The APIsec username with which the scans will be executed
+          apisec-username: ${{ secrets.apisec_username }}
+          # The Password of the APIsec user with which the scans will be executed
+          apisec-password: ${{ secrets.apisec_password}}
+          # The name of the project for security scan
+          apisec-project: "VAmPI"
+          # The name of the sarif format result file The file is written only if this property is provided.
+          sarif-result-file: "apisec-results.sarif"
+       - name: Import results
+         uses: github/codeql-action/upload-sarif@v2
+         with:
+          sarif_file: ./apisec-results.sarif
+```
+
+
 The APIsec credentials are read from github secrets.
 
 **Warning:** Never store your secrets in the repository.
