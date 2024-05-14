@@ -1,5 +1,7 @@
 [![APIsec](https://cloud.apisec.ai/assets/images/logo.png)](https://www.apisec.ai/product)
 
+*NOTE: This GitHub Action is for users of APIsec Standard, Professional, and Enterprise who are integrating scans into their GitHub workflows. If you are looking for the free utility by **APIsec University**- you can find that [here](https://github.com/apisec-university/free-API-security-test-action/tree/main)*
+
 APIsec addresses the critical need to secure APIs before they reach production. APIsec provides the industry’s only automated and continuous API testing platform that uncovers security vulnerabilities and logic flaws in APIs. Clients rely on APIsec to evaluate every update and release, ensuring that no APIs go to production with vulnerabilities.
 
 You develop the application and API, we bring complete and continuous security testing to you, accelerating development. 
