@@ -46,7 +46,7 @@ TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner
                     --authName) AUTH_NAME="$2"; shift;;       
                     --app_username) APP_USER="$2"; shift;;
                     --app_password) APP_PWD="$2"; shift;; 
-                    --app_endPointUrl) ENDPOINT_URL="$2"; shift;;
+                    #--app_endPointUrl) ENDPOINT_URL="$2"; shift;;
                     --app_token_param) TOKEN_PARAM="$2"; shift;;
                     --header_1) COMPLETE_HEADER1="$2"; shift;;
 		    
@@ -54,7 +54,7 @@ TEMP=$(getopt -n "$0" -a -l "host:,username:,password:,project:,profile:,scanner
                     --baseUrl) BASE_URL="$2"; shift;;
 
                     --category) CAT="$2"; shift;;
-                    --tier) TIER="$2"; shift;;		    
+                    #--tier) TIER="$2"; shift;;		    
                     --tags) FX_TAGS="$2"; shift;;		                    
                     --) shift;;
              esac
@@ -184,11 +184,11 @@ fi
 # For Project Registeration via OpenSpecUrl
 if [ "$OAS" = true ]; then
 
-     getProjectName=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer "$token"" | jq -r '.data|.name')          
+     getProjectName=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer $token" | jq -r '.data|.name')          
      if [ "$getProjectName" == null ];then
                 echo "Registering Project '${PROJECT_NAME}' via OpenAPISpecUrl method!!"
                 echo ' '
-                response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer "$token"" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"'${OPEN_API_SPEC_URL}'","planType":"ENTERPRISE","isFileLoad": false,"source":"FILE","personalizedCoverage":{"auths":[]}}')
+                response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer $token" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"'${OPEN_API_SPEC_URL}'","planType":"ENTERPRISE","isFileLoad": false,"source":"FILE","personalizedCoverage":{"auths":[]}}')
                 message=$(jq -r '.messages[].value' <<< "$response")                                          
                 data=$(jq -r '.data' <<< "$response")
                 project_name=$(jq -r '.name' <<< "$data")
@@ -218,7 +218,7 @@ if [ "$OAS" = true ]; then
                                       retryCount=`expr $retryCount + 1`  
                                       sleep 2
 
-                                      playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                                      playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                                       #playbookTaskStatus="In_progress"
                                       if [ "$playbookTaskStatus" == "Done" ]; then
                                             echo " "
@@ -240,10 +240,10 @@ if [ "$OAS" = true ]; then
                 fi   
      elif [ "$getProjectName" == "$PROJECT_NAME" ];then
              echo "Updating Project '${PROJECT_NAME}' via OpenAPISpecUrl method!!"
-             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
              projectId=$(echo "$dto" | jq -r '.id')
              orgId=$(echo "$dto" | jq -r '.org.id')             
-             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer "$token"" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"'${OPEN_API_SPEC_URL}'","openText": "","isFileLoad":false}' | jq -r '.data')
+             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer $token" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"'${OPEN_API_SPEC_URL}'","openText": "","isFileLoad":false}' | jq -r '.data')
              echo ' '             
              project_name=$(jq -r '.name' <<< "$data")
              project_id=$(jq -r '.id' <<< "$data")
@@ -261,7 +261,7 @@ if [ "$OAS" = true ]; then
                         pCount=`expr $pCount + 1`  
                         retryCount=`expr $retryCount + 1`  
                         sleep 2
-                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                 
                         if [ "$playbookTaskStatus" == "Done" ]; then
                               echo " "
@@ -299,10 +299,10 @@ if [ "$OASFile" = true ]; then
              openText=$(echo $openText |  jq . -Rc )
       fi
 
-      getProjectNameFile=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer "$token"" | jq -r '.data|.name')
+      getProjectNameFile=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer $token" | jq -r '.data|.name')
       if [ "$getProjectNameFile" == null ]; then
              echo "Registering Project '${PROJECT_NAME}' via fileupload method!!"                          
-             response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer "$token"" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"none","planType":"ENTERPRISE","isFileLoad": "true","openText": '"${openText}"',"source": "API","personalizedCoverage":{"auths":[]}}')                                       
+             response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer $token" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"none","planType":"ENTERPRISE","isFileLoad": "true","openText": '"${openText}"',"source": "API","personalizedCoverage":{"auths":[]}}')                                       
              message=$(jq -r '.messages[].value' <<< "$response")                          
              data=$(jq -r '.data' <<< "$response")
              echo ' '
@@ -330,7 +330,7 @@ if [ "$OASFile" = true ]; then
                                 retryCount=`expr $retryCount + 1`  
                                 sleep 2
 
-                                playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                                playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                                 #playbookTaskStatus="In_progress"
                                 if [ "$playbookTaskStatus" == "Done" ]; then
                                        echo " "
@@ -351,10 +351,10 @@ if [ "$OASFile" = true ]; then
              fi
       elif [ "$getProjectNameFile" == "$PROJECT_NAME" ];then
              echo "Updating Project '${PROJECT_NAME}' via fileupload method!!"
-             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
              projectId=$(echo "$dto" | jq -r '.id')
              orgId=$(echo "$dto" | jq -r '.org.id')
-             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer "$token"" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"None","openText": '"${openText}"',"isFileLoad":true}' | jq -r '.data')
+             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer $token" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"None","openText": '"${openText}"',"isFileLoad":true}' | jq -r '.data')
              echo ' '
              project_name=$(jq -r '.name' <<< "$data")
              project_id=$(jq -r '.id' <<< "$data")
@@ -373,7 +373,7 @@ if [ "$OASFile" = true ]; then
                         pCount=`expr $pCount + 1`  
                         retryCount=`expr $retryCount + 1`  
                         sleep 2
-                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                 
                         if [ "$playbookTaskStatus" == "Done" ]; then
                               echo " "
@@ -418,10 +418,10 @@ if [ "$INTERNAL_SPEC_FLAG" = true ]; then
              openText=$(echo $openText |  jq . -Rc)
              rm -rf open-api-spec.json
       fi      
-      getProjectNameFile=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer "$token"" | jq -r '.data|.name')
+      getProjectNameFile=$(curl -s -X GET "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" -H "accept: */*"  --header "Authorization: Bearer $token" | jq -r '.data|.name')
       if [ "$getProjectNameFile" == null ]; then
              echo "Registering Project '${PROJECT_NAME}' via fileupload method!!"
-             response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer "$token"" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"none","planType":"ENTERPRISE","isFileLoad": "true","openText": '"${openText}"',"source": "API","personalizedCoverage":{"auths":[]}}')                                       
+             response=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request POST "${FX_HOST}/api/v1/projects" --header "Authorization: Bearer $token" -d  '{"name":"'"${PROJECT_NAME}"'","openAPISpec":"none","planType":"ENTERPRISE","isFileLoad": "true","openText": '"${openText}"',"source": "API","personalizedCoverage":{"auths":[]}}')                                       
              message=$(jq -r '.messages[].value' <<< "$response")                          
              data=$(jq -r '.data' <<< "$response")
              echo ' '
@@ -451,7 +451,7 @@ if [ "$INTERNAL_SPEC_FLAG" = true ]; then
                                   pCount=`expr $pCount + 1`  
                                   retryCount=`expr $retryCount + 1`  
                                   sleep 10
-                                  playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                                  playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${project_id}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                                   #playbookTaskStatus="In_progress"
                                   if [ "$playbookTaskStatus" == "Done" ]; then
                                          echo " "
@@ -472,10 +472,10 @@ if [ "$INTERNAL_SPEC_FLAG" = true ]; then
              fi
       elif [ "$getProjectNameFile" == "$PROJECT_NAME" ];then
              echo "Updating Project '${PROJECT_NAME}' via fileupload method!!"
-             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+             dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
              projectId=$(echo "$dto" | jq -r '.id')
              orgId=$(echo "$dto" | jq -r '.org.id')
-             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer "$token"" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"None","openText": '"${openText}"',"isFileLoad":true}' | jq -r '.data')
+             data=$(curl -s  -H "Accept: application/json" -H "Content-Type: application/json" --location --request PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" --header "Authorization: Bearer $token" -d  '{"id":"'${projectId}'","org":{"id":"'${orgId}'"},"name":"'"${PROJECT_NAME}"'","openAPISpec":"None","openText": '"${openText}"',"isFileLoad":true}' | jq -r '.data')
              echo ' '
              project_name=$(jq -r '.name' <<< "$data")
              project_id=$(jq -r '.id' <<< "$data")
@@ -494,7 +494,7 @@ if [ "$INTERNAL_SPEC_FLAG" = true ]; then
                         pCount=`expr $pCount + 1`  
                         retryCount=`expr $retryCount + 1`  
                         sleep 2
-                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                        playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                 
                         if [ "$playbookTaskStatus" == "Done" ]; then
                               echo "OpenAPISpecFile upload and playbooks refresh task is succesfully completed!!!"
@@ -519,7 +519,7 @@ fi
 
 # To check Project Name existence 
 if [ "$PROJECT_NAME_FLAG" = true ]; then
-      dtoData=$(curl  -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"")
+      dtoData=$(curl  -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token")
       errorsFlag=$(echo "$dtoData" | jq -r '.errors')      
       if [ $errorsFlag = true ]; then           
            errMsg=$(echo "$dtoData" | jq -r '.messages[].value' | tr -d '[' | tr -d ']')
@@ -537,7 +537,7 @@ fi
 
 # To check Scanner Name existence
 if [ "$SCANNER_NAME_FLAG" = true ]; then      
-      scanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer "$token"")
+      scanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer $token")
       errorsFlag=$(echo "$scanData" | jq -r '.errors')      
       if [ $errorsFlag = true ]; then           
            errMsg=$(echo "$scanData" | jq -r '.messages[].value' | tr -d '[' | tr -d ']')           
@@ -552,7 +552,7 @@ if [ "$SCANNER_NAME_FLAG" = true ]; then
                          scanCount=`expr $scanCount + 1`  
                    fi
                done
-            superScanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters/superbotnetwork?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer "$token"")
+            superScanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters/superbotnetwork?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer $token")
             super_scanners_Names=$(jq -r '.data[].name' <<< "$superScanData")
             for sName in ${super_scanners_Names}
                do 
@@ -572,9 +572,9 @@ fi
 
 # For Refreshing Project Playbooks
 if [ "$REFRESH_PLAYBOOKS" = true ]; then
-     #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+     #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
      projectId=$(echo "$dto" | jq -r '.id')
-     updatedData=$(curl -s -X PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$dto")
+     updatedData=$(curl -s -X PUT "${FX_HOST}/api/v1/projects/${projectId}/refresh-specs" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$dto")
      uErrorsFlag=$(echo $updatedData | jq -r '.errors')
      if [ $uErrorsFlag = true ]; then     
            errMsg=$(echo "$updatedData" | jq -r '.messages[].value' | tr -d '[' | tr -d ']')                                                                  
@@ -595,7 +595,7 @@ if [ "$REFRESH_PLAYBOOKS" = true ]; then
                       retryCount=`expr $retryCount + 1`  
                       sleep 2
 
-                      playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '."data".status')
+                      playbookTaskStatus=$(curl -s -X GET "${FX_HOST}/api/v1/events/project/${projectId}/Sync" -H "accept: */*" -H "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '."data".status')
                       #playbookTaskStatus="In_progress"
                       if [ "$playbookTaskStatus" == "Done" ]; then
                             echo "Playbooks refresh task is succesfully completed!!!"
@@ -614,8 +614,8 @@ fi
 # For Project Profile To be Updated with a scanner
 if [ "$PROFILE_SCANNER_FLAG" = true ]; then
             PROJECT_ID=$(echo "$dto" | jq -r '.id')
-            pdto=$(echo $dto |  tr -d ' ')                 
-            data=$(curl -s --location --request GET "${FX_HOST}/api/v1/jobs/project-id/${PROJECT_ID}?page=0&pageSize=20&sort=modifiedDate%2CcreatedDate&sortType=DESC"  --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[]')
+            #pdto=$(echo $dto |  tr -d ' ')                 
+            data=$(curl -s --location --request GET "${FX_HOST}/api/v1/jobs/project-id/${PROJECT_ID}?page=0&pageSize=20&sort=modifiedDate%2CcreatedDate&sortType=DESC"  --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[]')
             ProfNames=$(echo $data | jq -r '.name')
             ProfCount=0            
             
@@ -630,7 +630,7 @@ if [ "$PROFILE_SCANNER_FLAG" = true ]; then
                  exit 1
             fi            
 
-            scanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer "$token"")
+            scanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer $token")
             scanCount=0            
             scanners_Names=$(jq -r '.data[].name' <<< "$scanData")
             org_Name=$(echo "$scanData" | jq -r '.data[].org.name')
@@ -641,7 +641,7 @@ if [ "$PROFILE_SCANNER_FLAG" = true ]; then
                          scanCount=`expr $scanCount + 1`  
                    fi
                done
-            superScanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters/superbotnetwork?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer "$token"")
+            superScanData=$(curl -s --location --request GET "$FX_HOST/api/v1/bot-clusters/superbotnetwork?page=0&pageSize=20&sort=createdDate&sortType=DESC"  --header "Authorization: Bearer $token")
             super_scanners_Names=$(jq -r '.data[].name' <<< "$superScanData")
             for sName in ${super_scanners_Names}
                do 
@@ -659,14 +659,14 @@ if [ "$PROFILE_SCANNER_FLAG" = true ]; then
                        _jq() {
                              echo ${row} | base64 --decode | jq -r ${1}
                        }
-                       profName=$(echo $(_jq '.') | jq  -r '.name')
-                       profId=$(echo $(_jq '.') | jq  -r '.id')    
+                       profName=$(echo "$(_jq '.')" | jq  -r '.name')
+                       profId=$(echo "$(_jq '.')" | jq  -r '.id')    
                        if [ "$PROFILE_NAME" == "$profName"  ]; then
                               echo "Updating $PROFILE_NAME profile with $SCANNER_NAME scanner in $FX_PROJECT_NAME project!!"
-                              udto=$(echo $(_jq '.') | jq '.regions = "'${SCANNER_NAME}'"')
-                              envId=$(echo $(_jq '.') | jq '.environment.id')
-                              envName=$(echo $(_jq '.') | jq '.environment.name')
-                              updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/jobs" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto")
+                              udto=$(echo "$(_jq '.')" | jq '.regions = "'${SCANNER_NAME}'"')
+                              envId=$(echo "$(_jq '.')" | jq '.environment.id')
+                              envName=$(echo "$(_jq '.')" | jq '.environment.name')
+                              updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/jobs" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto")
                               #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/jobs" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto" | jq -r '.data')
                               uErrorsFlag=$(echo $updatedData | jq -r '.errors')
                               if [ $uErrorsFlag = true ]; then     
@@ -698,9 +698,9 @@ fi
 # For Project Credentials Update
 if   [ "$AUTH_FLAG" = true  ]; then
         
-        #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+        #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
         PROJECT_ID=$(echo "$dto" | jq -r '.id')
-        authData=$(curl -s --location --request GET "${FX_HOST}/api/v1/envs/projects/${PROJECT_ID}?page=0&pageSize=25" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[]')        
+        authData=$(curl -s --location --request GET "${FX_HOST}/api/v1/envs/projects/${PROJECT_ID}?page=0&pageSize=25" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[]')
         EnvNames=$(echo $authData | jq -r '.name')
         EnvCount=0
         for eName in ${EnvNames}
@@ -719,13 +719,13 @@ if   [ "$AUTH_FLAG" = true  ]; then
                       _jq() {
                              echo ${row} | base64 --decode | jq -r ${1}
                       }
-                      eName=$(echo $(_jq '.') | jq  -r '.name')
-                      eId=$(echo $(_jq '.') | jq  -r '.id')
+                      eName=$(echo "$(_jq '.')" | jq  -r '.name')
+                      eId=$(echo "$(_jq '.')" | jq  -r '.id')
 
                       if [ "$ENV_NAME" == "$eName"  ]; then
-                            updatedAuths=$(echo $(_jq '.') | jq -r '.auths[]')
-                            updatedAuths1=$(echo $(_jq '.') | jq -r '.auths')
-                            AuthNames=$(echo $(_jq '.') | jq -r '.auths[].name')                                                      
+                            updatedAuths=$(echo "$(_jq '.')" | jq -r '.auths[]')
+                            updatedAuths1=$(echo "$(_jq '.')" | jq -r '.auths')
+                            AuthNames=$(echo "$(_jq '.')" | jq -r '.auths[].name')                                                      
                             AuthCount=0
                             for aName in ${AuthNames}
                                 do 
@@ -743,16 +743,16 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                       _pq() {
                                             echo ${row1} | base64 --decode | jq -r ${1}
                                       }
-                                      authType=$(echo $(_pq '.') | jq -r '.authType')                                
-                                      authName=$(echo $(_pq '.') | jq -r '.name')
+                                      authType=$(echo "$(_pq '.')" | jq -r '.authType')                                
+                                      authName=$(echo "$(_pq '.')" | jq -r '.name')
 
                                       case "$authType" in "Basic")   if [ "$authName" == "$AUTH_NAME" ]; then   
                                                                            echo "Updating '$AUTH_NAME' Auth with Basic as AuthType of '$ENV_NAME' environment in '$FX_PROJECT_NAME' project!!"
                                                                            echo " "
                                                                            bAuth=$(echo $updatedAuths1 | jq 'map(select(.name == "'${AUTH_NAME}'") |= (.username = "'${APP_USER}'" | .password = "'${APP_PWD}'"))' | jq -c .) 
-                                                                           udto=$(echo $(_jq '.') | jq '.auths = '"${bAuth}"'')
-                                                                           #updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto" | jq -r '.data')
-                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto")
+                                                                           udto=$(echo "$(_jq '.')" | jq '.auths = '"${bAuth}"'')
+                                                                           #updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto" | jq -r '.data')
+                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto")
                                                                            uErrorsFlag=$(echo $updatedResp | jq -r '.errors')
 
                                                                            if [ $uErrorsFlag = true ]; then     
@@ -767,9 +767,9 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                                                                               _aq() {
                                                                                                     echo ${row2} | base64 --decode | jq -r ${1}
                                                                                               }
-                                                                                              upAuthName=$(echo $(_aq '.') | jq -r '.name')
+                                                                                              upAuthName=$(echo "$(_aq '.')" | jq -r '.name')
                                                                                               if [ "$upAuthName" == "$AUTH_NAME" ]; then                                                                                                
-                                                                                                     updatedAuthObj=$(echo $(_aq '.') | jq -r .)
+                                                                                                     updatedAuthObj=$(echo "$(_aq '.')" | jq -r .)
                                                                                                      echo " " 
                                                                                                      echo "ProjectName: $FX_PROJECT_NAME" 
                                                                                                      echo "ProjectId: $PROJECT_ID" 
@@ -786,9 +786,9 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                                                            echo "Updating '$AUTH_NAME' Auth with Digest as AuthType of '$ENV_NAME' environment  in '$FX_PROJECT_NAME' project!!"
                                                                            echo " "
                                                                            bAuth=$(echo $updatedAuths1 | jq 'map(select(.name == "'${AUTH_NAME}'") |= (.username = "'${APP_USER}'" | .password = "'${APP_PWD}'"))' | jq -c .) 
-                                                                           udto=$(echo $(_jq '.') | jq '.auths = '"${bAuth}"'')
-                                                                           #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto" | jq -r '.data') 
-                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto")
+                                                                           udto=$(echo "$(_jq '.')" | jq '.auths = '"${bAuth}"'')
+                                                                           #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto" | jq -r '.data') 
+                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto")
                                                                            uErrorsFlag=$(echo $updatedResp | jq -r '.errors')
 
                                                                            if [ $uErrorsFlag = true ]; then     
@@ -803,9 +803,9 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                                                                               _aq() {
                                                                                                     echo ${row2} | base64 --decode | jq -r ${1}
                                                                                               }
-                                                                                              upAuthName=$(echo $(_aq '.') | jq -r '.name')
+                                                                                              upAuthName=$(echo "$(_aq '.')" | jq -r '.name')
                                                                                               if [ "$upAuthName" == "$AUTH_NAME" ]; then                                                                                                
-                                                                                                     updatedAuthObj=$(echo $(_aq '.') | jq -r .)
+                                                                                                     updatedAuthObj=$(echo "$(_aq '.')" | jq -r .)
                                                                                                      echo " " 
                                                                                                      echo "ProjectName: $FX_PROJECT_NAME" 
                                                                                                      echo "ProjectId: $PROJECT_ID" 
@@ -826,9 +826,9 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                                                            #auth='Authorization: Bearer {{@CmdCache | curl -s -d '\'{"\"""username"\""":"\"""${APP_USER}"\""","\"""password"\""":"\"""${APP_PWD}"\"""}\'' -H '\'"Content-Type: application/json"\'' -H '\'"Accept: application/json"\'' -X POST '${ENDPOINT_URL}' | jq --raw-output '"'${TOKEN_PARAM}'"' }}'                                                                     
                                                                            auth=$(echo $COMPLETE_HEADER1)
                                                                            bAuth=$(echo $updatedAuths1 | jq --arg path "$auth" 'map(select(.name == "'${AUTH_NAME}'") |= (.header_1 = $path ))' | jq -c . )                                                                                                                                                      
-                                                                           udto=$(echo $(_jq '.') | jq '.auths = '"${bAuth}"'')
-                                                                           #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto" | jq -r '.data') 
-                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$udto")
+                                                                           udto=$(echo "$(_jq '.')" | jq '.auths = '"${bAuth}"'')
+                                                                           #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto" | jq -r '.data') 
+                                                                           updatedResp=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$udto")
                                                                            uErrorsFlag=$(echo $updatedResp | jq -r '.errors')
 
                                                                            if [ $uErrorsFlag = true ]; then     
@@ -843,9 +843,9 @@ if   [ "$AUTH_FLAG" = true  ]; then
                                                                                               _aq() {
                                                                                                     echo ${row2} | base64 --decode | jq -r ${1}
                                                                                               }
-                                                                                              upAuthName=$(echo $(_aq '.') | jq -r '.name')
+                                                                                              upAuthName=$(echo "$(_aq '.')" | jq -r '.name')
                                                                                               if [ "$upAuthName" == "$AUTH_NAME" ]; then                                                                                                
-                                                                                                     updatedAuthObj=$(echo $(_aq '.') | jq -r .)
+                                                                                                     updatedAuthObj=$(echo "$(_aq '.')" | jq -r .)
                                                                                                      echo " " 
                                                                                                      echo "ProjectName: $FX_PROJECT_NAME" 
                                                                                                      echo "ProjectId: $PROJECT_ID" 
@@ -868,9 +868,9 @@ fi
 
 # For Project BaseUrl Update
 if [ "$BASE_URL_FLAG" = true ]; then 
-      #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data')
+      #dto=$(curl -s --location --request GET  "${FX_HOST}/api/v1/projects/find-by-name/${FX_PROJECT_NAME}" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data')
       PROJECT_ID=$(echo "$dto" | jq -r '.id')
-      data=$(curl -s --location --request GET "${FX_HOST}/api/v1/envs/projects/${PROJECT_ID}?page=0&pageSize=25" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[]')
+      data=$(curl -s --location --request GET "${FX_HOST}/api/v1/envs/projects/${PROJECT_ID}?page=0&pageSize=25" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[]')
       EnvNames=$(echo $data | jq -r '.name')
       EnvCount=0
       for eName in ${EnvNames}
@@ -889,13 +889,13 @@ if [ "$BASE_URL_FLAG" = true ]; then
                _jq() {
                     echo ${row} | base64 --decode | jq -r ${1}
                 }
-                eName=$(echo $(_jq '.') | jq  -r '.name')
-                eId=$(echo $(_jq '.') | jq  -r '.id') 
+                eName=$(echo "$(_jq '.')" | jq  -r '.name')
+                eId=$(echo "$(_jq '.')" | jq  -r '.id') 
     
                if [ "$ENV_NAME" == "$eName"  ]; then
                      echo "Updating $ENV_NAME environment with $BASE_URL as baseurl in $PROJECT_NAME project!!"
-                     dto=$(echo $(_jq '.') | jq '.baseUrl = "'${BASE_URL}'"')
-                     updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$dto")
+                     dto=$(echo "$(_jq '.')" | jq '.baseUrl = "'${BASE_URL}'"')
+                     updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$dto")
                      uErrorsFlag=$(echo $updatedData | jq -r '.errors')
 
                            if [ $uErrorsFlag = true ]; then     
@@ -905,7 +905,7 @@ if [ "$BASE_URL_FLAG" = true ]; then
                            elif [ $uErrorsFlag = false ]; then 
                                   #exit 1
                                   updatedBaseData=$(echo $updatedData | jq -r '.data')
-                                  #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" -d "$dto" | jq -r '.data')
+                                  #updatedData=$(curl -s --location --request PUT "${FX_HOST}/api/v1/projects/$PROJECT_ID/env/$eId" --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "$dto" | jq -r '.data')
                                   updatedBaseUrl=$(echo "$updatedBaseData" | jq -r '.baseUrl')
                                   echo " "
                                   echo "ProjectName: $PROJECT_NAME"
@@ -965,7 +965,7 @@ fi
 # esac
 
 if [ "$PROFILE_NAME" == "Super" ]; then
-      data=$(curl -s --location --request GET "${FX_HOST}/api/v1/jobs/project-id/${PROJECT_ID}?page=0&pageSize=20&sort=modifiedDate%2CcreatedDate&sortType=DESC"  --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[]')
+      data=$(curl -s --location --request GET "${FX_HOST}/api/v1/jobs/project-id/${PROJECT_ID}?page=0&pageSize=20&sort=modifiedDate%2CcreatedDate&sortType=DESC"  --header "Accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[]')
       ProfNames=$(echo $data | jq -r '.name')
          for pName in ${ProfNames}
                do 
@@ -974,7 +974,7 @@ if [ "$PROFILE_NAME" == "Super" ]; then
                            url=$( echo "$URL" | sed 's/ /%20/g' )
                            echo "The request is $url"
                            echo " "
-                           data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer "$token"" | jq -r '.["data"]')
+                           data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer $token" | jq -r '.["data"]')
                            runId=$( jq -r '.id' <<< "$data")
                            projectId=$( jq -r '.job.project.id' <<< "$data")
                            echo "runId =" $runId
@@ -982,18 +982,19 @@ if [ "$PROFILE_NAME" == "Super" ]; then
                            then
                                      echo "RunId = " "$runId"
                                      echo "Invalid runid"
-                                     echo $(curl -s --location --request POST "${FX_HOST}/api/v1/runs/project/${FX_PROJECT_NAME}?jobName=${pName}&region=${REGION}&emailReport=${FX_EMAIL_REPORT}&reportType=${FX_REPORT_TYPE}${FX_SCRIPT}" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
+                                     echo "$(curl -s --location --request POST "${FX_HOST}/api/v1/runs/project/${FX_PROJECT_NAME}?jobName=${pName}&region=${REGION}&emailReport=${FX_EMAIL_REPORT}&reportType=${FX_REPORT_TYPE}${FX_SCRIPT}" --header "Authorization: Bearer $token" | jq -r '.["data"]|.id')"
                                      exit 1
                            fi
                            taskStatus="WAITING"
                            echo "taskStatus = " $taskStatus
 
-                           while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
+                           #while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
+                           while [ "$taskStatus" == "WAITING" ] || [ "$taskStatus" == "PROCESSING" ]
                                     do
                                            sleep 5
                                            echo "Checking Status...."
 
-                                           passPercent=$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer "$token""| jq -r '.["data"]|.ciCdStatus')
+                                           passPercent=$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer $token"| jq -r '.["data"]|.ciCdStatus')
 
                                                    IFS=':' read -r -a array <<< "$passPercent"
 
@@ -1013,14 +1014,14 @@ if [ "$PROFILE_NAME" == "Super" ]; then
                                                 if [ "$FX_EMAIL_REPORT" = true ]; then     
                                                       sleep 10
                                                       echo "Will wait for 10 seconds"                       
-                                                      totalEScount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}/test-suite-responses" -H "accept: */*"  --header "Authorization: Bearer "$token""  | jq -r '.data[]|.id')
-                                                      totalPGcount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}" -H "accept: */*"  --header "Authorization: Bearer "$token""  | jq -r '.data.task.totalTests')
+                                                      totalEScount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}/test-suite-responses" -H "accept: */*"  --header "Authorization: Bearer $token"  | jq -r '.data[]|.id')
+                                                      totalPGcount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}" -H "accept: */*"  --header "Authorization: Bearer $token"  | jq -r '.data.task.totalTests')
                                                       esCount=0
                                                       for scan in ${totalEScount}
                                                           do
-                                                                escount=`expr $escount + 1`
+                                                                esCount=`expr $esCount + 1`
                                                           done
-                                                      if [ $totalPGcount -eq $escount ]; then
+                                                      if [ $totalPGcount -eq $esCount ]; then
                                                            echo "Email report will be sent in a short while!!"
                                                       else
                                                            echo "Email report will be sent after some delay!!"
@@ -1033,7 +1034,7 @@ if [ "$PROFILE_NAME" == "Super" ]; then
                done
 
          if [ "$OUTPUT_FILENAME" != "" ];then
-               sarifoutput=$(curl -s --location --request GET "${FX_HOST}/api/v1/projects/${PROJECT_ID}/sarif" --header "Authorization: Bearer "$token"" | jq  '.data')
+               sarifoutput=$(curl -s --location --request GET "${FX_HOST}/api/v1/projects/${PROJECT_ID}/sarif" --header "Authorization: Bearer $token" | jq  '.data')
 	         #echo $sarifoutput >> $OUTPUT_FILENAME
                echo $sarifoutput >> $GITHUB_WORKSPACE/$OUTPUT_FILENAME
                echo "SARIF output file created successfully"
@@ -1041,7 +1042,7 @@ if [ "$PROFILE_NAME" == "Super" ]; then
          fi
 
          if [ "$FAIL_ON_VULN_SEVERITY_FLAG" = true ]; then
-                severity=$(curl -s -X GET "${FX_HOST}/api/v1/projects/${PROJECT_ID}/vulnerabilities?&severity=All&page=0&pageSize=20" -H "accept: */*"  "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[] | .severity')
+                severity=$(curl -s -X GET "${FX_HOST}/api/v1/projects/${PROJECT_ID}/vulnerabilities?&severity=All&page=0&pageSize=20" -H "accept: */*"  "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[] | .severity')
                 cVulCount=0
                 for vul in ${severity}
                     do
@@ -1181,11 +1182,11 @@ else
       url=$( echo "$URL" | sed 's/ /%20/g' )
       echo "The request is $url"
       echo " "
-      data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer "$token"" | jq -r '.["data"]')  
-      # data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer "$token"" | jq -r '.["data"]')
+      data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer $token" | jq -r '.["data"]')  
+      # data=$(curl -s --location --request POST "$url" --header "Authorization: Bearer $token" | jq -r '.["data"]')
       runId=$( jq -r '.id' <<< "$data")
       projectId=$( jq -r '.job.project.id' <<< "$data")
-      #runId=$(curl -s --location --request POST "$url" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
+      #runId=$(curl -s --location --request POST "$url" --header "Authorization: Bearer $token" | jq -r '.["data"]|.id')
 
       echo "runId =" $runId
       #if [ -z "$runId" ]
@@ -1193,7 +1194,7 @@ else
       then
             echo "RunId = " "$runId"
             echo "Invalid runid"
-            echo $(curl -s --location --request POST "${FX_HOST}/api/v1/runs/project/${FX_PROJECT_NAME}?jobName=${PROFILE_NAME}&region=${REGION}&emailReport=${FX_EMAIL_REPORT}&reportType=${FX_REPORT_TYPE}${FX_SCRIPT}" --header "Authorization: Bearer "$token"" | jq -r '.["data"]|.id')
+            echo "$(curl -s --location --request POST "${FX_HOST}/api/v1/runs/project/${FX_PROJECT_NAME}?jobName=${PROFILE_NAME}&region=${REGION}&emailReport=${FX_EMAIL_REPORT}&reportType=${FX_REPORT_TYPE}${FX_SCRIPT}" --header "Authorization: Bearer $token" | jq -r '.["data"]|.id')"
             exit 1
       fi
 
@@ -1201,12 +1202,13 @@ else
       taskStatus="WAITING"
       echo "taskStatus = " $taskStatus
 
-      while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]
+      while [ "$taskStatus" == "WAITING" ] || [ "$taskStatus" == "PROCESSING" ]
+      #while [ "$taskStatus" == "WAITING" -o "$taskStatus" == "PROCESSING" ]      
                do
                              sleep 5
                              echo "Checking Status...."
 
-                             passPercent=$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer "$token""| jq -r '.["data"]|.ciCdStatus')
+                             passPercent=$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer $token"| jq -r '.["data"]|.ciCdStatus')
 
                              IFS=':' read -r -a array <<< "$passPercent"
 
@@ -1226,28 +1228,29 @@ else
                                     if [ "$FX_EMAIL_REPORT" = true ]; then     
                                           sleep 10
                                           echo "Will wait for 10 seconds"                       
-                                          totalEScount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}/test-suite-responses" -H "accept: */*"  --header "Authorization: Bearer "$token""  | jq -r '.data[]|.id')
-                                          totalPGcount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}" -H "accept: */*"  --header "Authorization: Bearer "$token""  | jq -r '.data.task.totalTests')
+                                          totalEScount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}/test-suite-responses" -H "accept: */*"  --header "Authorization: Bearer $token"  | jq -r '.data[]|.id')
+                                          totalPGcount=$(curl -s -X GET "${FX_HOST}/api/v1/runs/${runId}" -H "accept: */*"  --header "Authorization: Bearer $token"  | jq -r '.data.task.totalTests')
                                           esCount=0 
                                           for scan in ${totalEScount}
                                               do
-                                                   escount=`expr $escount + 1`
+                                                   echo "$scan" > /dev/null
+                                                   esCount=`expr $esCount + 1`
                                               done
-                                          if [ $totalPGcount -eq $escount ]; then
+                                          if [ $totalPGcount -eq $esCount ]; then
                                                 echo "Email report will be sent in a short while!!"
                                           else
                                                 echo "Email report will be sent after some delay!!"
                                           fi
                                     fi
 			                  if [ "$OUTPUT_FILENAME" != "" ];then
-                                          sarifoutput=$(curl -s --location --request GET "${FX_HOST}/api/v1/projects/${projectId}/sarif" --header "Authorization: Bearer "$token"" | jq  '.data')
+                                          sarifoutput=$(curl -s --location --request GET "${FX_HOST}/api/v1/projects/${projectId}/sarif" --header "Authorization: Bearer $token" | jq  '.data')
 		                              #echo $sarifoutput >> $OUTPUT_FILENAME
                                           echo $sarifoutput >> $GITHUB_WORKSPACE/$OUTPUT_FILENAME
                		                  echo "SARIF output file created successfully"
                                           echo " "
                                     fi
                                     if [ "$FAIL_ON_VULN_SEVERITY_FLAG" = true ]; then
-                                          severity=$(curl -s -X GET "${FX_HOST}/api/v1/projects/${projectId}/vulnerabilities?&severity=All&page=0&pageSize=20" -H "accept: */*"  "Content-Type: application/json" --header "Authorization: Bearer "$token"" | jq -r '.data[] | .severity')
+                                          severity=$(curl -s -X GET "${FX_HOST}/api/v1/projects/${projectId}/vulnerabilities?&severity=All&page=0&pageSize=20" -H "accept: */*"  "Content-Type: application/json" --header "Authorization: Bearer $token" | jq -r '.data[] | .severity')
 
                                           cVulCount=0
                                           for vul in ${severity}
@@ -1385,7 +1388,7 @@ else
             exit 1
       fi
 
-      echo "$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer "$token"")"
+      echo "$(curl -s --location --request GET "${FX_HOST}/api/v1/runs/${runId}" --header "Authorization: Bearer $token")"
       exit 1
 fi 
 #return 0
